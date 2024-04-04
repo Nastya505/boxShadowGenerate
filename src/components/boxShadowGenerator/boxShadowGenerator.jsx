@@ -3,60 +3,29 @@ import styles from './boxShadowGenerator.module.css';
 
 
 const BoxShadowGenerator = () => {
-  const colorShadowRef = useRef('#000000');
-  const colorBoxRef = useRef('#ccc');
-  const BlurRef = useRef(0);
-  const RadiusRef = useRef(0);
-  const HorizontalRef = useRef(0);
-  const VerticalRef = useRef(0);
-  const OpacityRef = useRef(1);
-  const boxRef = useRef(null);
+  const colorShadowRef = useRef();
+  const BlurRef = useRef();
+  const RadiusRef = useRef();
+  const HorizontalRef = useRef();
+  const VerticalRef = useRef();
+  const OpacityRef = useRef();
+  const boxRef = useRef();
   const [copied, setCopied] = useState(false);
+  const [boxShadow, setBoxShadow] = useState('');
 
-  const handleColorShadowChange = (e) => {
-    colorShadowRef.current = e.target.value;
-    updateBoxShadow();
-  };
+const handleChange = () => {
+  updateBoxShadow();
+}
 
-  const handleColorBoxChange = (e) => {
-    colorBoxRef.current = e.target.value;
-    updateBoxShadow();
-  };
-
-  const handleBlurChange = (e) => {
-    BlurRef.current = e.target.value;
-    updateBoxShadow();
-  };
-
-  const handleRadiusChange = (e) => {
-    RadiusRef.current = e.target.value;
-    updateBoxShadow();
-  };
-
-  const handleHorizontalChange = (e) => {
-    HorizontalRef.current = e.target.value;
-    updateBoxShadow();
-  };
-
-  const handleVerticalChange = (e) => {
-    VerticalRef.current = e.target.value;
-    updateBoxShadow();
-  };
-
-  const handleOpacityChange = (e) => {
-    OpacityRef.current = e.target.value;
-    updateBoxShadow();
-  };
-
-  const updateBoxShadow = () => {
-    const boxShadow = `${HorizontalRef.current}px ${VerticalRef.current}px ${BlurRef.current}px ${RadiusRef.current}px rgba(${parseInt(colorShadowRef.current.slice(1, 3), 16)}, ${parseInt(colorShadowRef.current.slice(3, 5), 16)}, ${parseInt(colorShadowRef.current.slice(5, 7), 16)}, ${OpacityRef.current})`;
+  function updateBoxShadow() {
+    const newBoxShadow = `${HorizontalRef.current.value}px ${VerticalRef.current.value}px ${BlurRef.current.value}px ${RadiusRef.current.value}px rgba(${parseInt(colorShadowRef.current.value.slice(1, 3), 16)}, ${parseInt(colorShadowRef.current.value.slice(3, 5), 16)}, ${parseInt(colorShadowRef.current.value.slice(5, 7), 16)}, ${OpacityRef.current.value})`;
+    setBoxShadow(newBoxShadow);
     boxRef.current.style.boxShadow = boxShadow;
-  };
+  }
 
   const copyBoxShadow = () => {
-    const boxShadow = `${HorizontalRef.current}px ${VerticalRef.current}px ${BlurRef.current}px ${RadiusRef.current}px rgba(${parseInt(colorShadowRef.current.slice(1, 3), 16)}, ${parseInt(colorShadowRef.current.slice(3, 5), 16)}, ${parseInt(colorShadowRef.current.slice(5, 7), 16)}, ${OpacityRef.current})`;
     navigator.clipboard.writeText(boxShadow);
-   setCopied(true);
+    setCopied(true);
     setTimeout(() => {
       setCopied(false);
     }, 2000);
@@ -66,46 +35,39 @@ const BoxShadowGenerator = () => {
   return (
     <div className={styles.container} >
       <div className={styles.preview}>
-        <div ref={boxRef} className={styles.box} style={{ backgroundColor: colorBoxRef.current }}></div>
+        <div ref={boxRef} className={styles.box}></div>
       </div>
 
       <div className={styles.settings}>
-
-        <div class={styles.inputWrapper}>
+        <div className={styles.inputWrapper}>
           <label>Vertical Shadow</label>
-          <input type="range" min="-100" max="100" value={VerticalRef.current} onChange={handleVerticalChange} />
+          <input type="range" min="-100" max="100" defaultValue="0" ref={VerticalRef}  onChange={handleChange} />
         </div>
 
-        <div class={styles.inputWrapper}>
+        <div className={styles.inputWrapper}>
           <label >Horizontal Shadow</label>
-          <input type="range" min="-100" max="100" value={HorizontalRef.current} onChange={handleHorizontalChange} />
+          <input type="range" min="-100" max="100" defaultValue="0" ref={HorizontalRef} onChange={handleChange} />
         </div>
 
-        <div class={styles.inputWrapper}>
+        <div className={styles.inputWrapper}>
           <label>Radius</label>
-          <input type="range" min="0" max="50" value={RadiusRef.current} onChange={handleRadiusChange} />
+          <input type="range" min="0" max="50" defaultValue="0" ref={RadiusRef} onChange={handleChange} />
         </div>
 
-        <div class={styles.inputWrapper}>
+        <div className={styles.inputWrapper}>
           <label>Blur</label>
-          <input type="range" min="0" max="100" value={BlurRef.current} onChange={handleBlurChange} />
+          <input type="range" min="0" max="100" defaultValue="0" ref={BlurRef} onChange={handleChange}  />
         </div>
 
-        <div class={styles.colorWrapper}>
-          <input type="color" value={colorShadowRef.current} onChange={handleColorShadowChange} />
+        <div className={styles.colorWrapper}>
+          <input type="color" ref={colorShadowRef} defaultValue="#000000" onChange={handleChange}  />
           <label>Color Shadow</label>
         </div>
 
-        <div class={styles.inputWrapper}>
+        <div className={styles.inputWrapper}>
           <label>Opacity</label>
-          <input type="range" min="0" max="1" step="0.1" value={OpacityRef.current} onChange={handleOpacityChange} />
+          <input type="range" min="0" max="1" step="0.1" defaultValue="1" ref={OpacityRef} onChange={handleChange}  />
         </div>
-
-        <div class={styles.colorWrapper}>
-          <input type="color" min="0" max="100" value={colorBoxRef.current} onChange={handleColorBoxChange} />
-          <label>Color Box</label>
-        </div>
-
       </div>
 
       <button className={styles.button} onClick={copyBoxShadow}>
